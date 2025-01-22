@@ -8,7 +8,6 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
@@ -17,10 +16,6 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -30,7 +25,6 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "DLC")
-@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Dlc.findAll", query = "SELECT d FROM Dlc d"),
   @NamedQuery(name = "Dlc.findByIdDlc", query = "SELECT d FROM Dlc d WHERE d.idDlc = :idDlc"),
@@ -41,15 +35,14 @@ public class Dlc implements Serializable {
 
   @Id
   @Basic(optional = false)
-  @NotNull
   @GeneratedValue(generator = "secuencia_dlc")
   @SequenceGenerator(name="secuencia_dlc", sequenceName = "dlc_sequence", allocationSize = 1)
   @Column(name = "ID_DLC")
   private Long idDlc;
 
   @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 200)
+
+
   @Column(name = "TITULO", nullable = false, length = 200)
   private String titulo;
 
@@ -58,8 +51,7 @@ public class Dlc implements Serializable {
   private String descripcion;
 
   @Basic(optional = false)
-  @NotNull
-  @Digits(integer = 10, fraction = 2) // Refleja precisión y escala definidas en el script SQL
+  
   @Column(name = "PRECIO", nullable = false, precision = 10, scale = 2)
   private BigDecimal precio;
 
