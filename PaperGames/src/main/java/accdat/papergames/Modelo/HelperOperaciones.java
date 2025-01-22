@@ -15,7 +15,6 @@ import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -140,7 +139,7 @@ public class HelperOperaciones {
   
  //----------------------------------------------------------------------------------------->
   public void insertarVideojuego (String inputTitulo, String inputDescripcion, short inputAnioSalida, 
-          short inputPegi, String inputGenero, Collection<Plataforma> inputPlataformas, Collection<ModoJuego> inputModosJuego) {
+          short inputPegi, String inputGenero, List<Plataforma> inputPlataformas, List<ModoJuego> inputModosJuego) {
     Videojuego nuevoVideojuego = new Videojuego(Long.valueOf((long) 0));
     nuevoVideojuego.setTitulo(inputTitulo);
     nuevoVideojuego.setDescripcion(inputDescripcion);
