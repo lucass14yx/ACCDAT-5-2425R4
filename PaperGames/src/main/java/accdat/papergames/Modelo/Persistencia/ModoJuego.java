@@ -5,27 +5,23 @@
 package accdat.papergames.Modelo.Persistencia;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
+
 import java.io.Serializable;
-import java.util.Collection;
+
 
 /**
  *
- * @author rezzt
+ * @author rezzt && lxxkass
  */
 @Entity
 @Table(name = "MODO_JUEGO")
-@XmlRootElement
+
 @NamedQueries({
   @NamedQuery(name = "ModoJuego.findAll", query = "SELECT m FROM ModoJuego m"),
   @NamedQuery(name = "ModoJuego.findByNombreModoJuego", query = "SELECT m FROM ModoJuego m WHERE m.nombreModoJuego = :nombreModoJuego")})
@@ -34,13 +30,10 @@ public class ModoJuego implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 100) // Refleja el tamaño máximo de la columna
-  @Column(name = "NOMBRE_MODO_JUEGO", nullable = false, length = 100)
   private String nombreModoJuego;
 
   @ManyToMany(mappedBy = "modoJuegoCollection")
-  private Collection<Videojuego> videojuegoCollection;
+  private List<Videojuego> videojuegoCollection;
 
   public ModoJuego() {
   }
@@ -57,12 +50,12 @@ public class ModoJuego implements Serializable {
     this.nombreModoJuego = nombreModoJuego;
   }
 
-  @XmlTransient
-  public Collection<Videojuego> getVideojuegoCollection() {
+
+  public List<Videojuego> getVideojuegoCollection() {
     return videojuegoCollection;
   }
 
-  public void setVideojuegoCollection(Collection<Videojuego> videojuegoCollection) {
+  public void setVideojuegoCollection(List<Videojuego> videojuegoCollection) {
     this.videojuegoCollection = videojuegoCollection;
   }
 
