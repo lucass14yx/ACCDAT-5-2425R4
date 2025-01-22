@@ -12,7 +12,6 @@ import jakarta.persistence.criteria.Root;
 import accdat.papergames.Modelo.Persistencia.Genero;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import java.util.ArrayList;
-import java.util.Collection;
 import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Dlc;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
@@ -66,19 +65,19 @@ public class VideojuegoJpaController implements Serializable {
         nombrePlataforma = em.getReference(nombrePlataforma.getClass(), nombrePlataforma.getNombrePlataforma());
         videojuego.setNombrePlataforma(nombrePlataforma);
       }
-      Collection<Plataforma> attachedPlataformaCollection = new ArrayList<Plataforma>();
+      List<Plataforma> attachedPlataformaCollection = new ArrayList<Plataforma>();
       for (Plataforma plataformaCollectionPlataformaToAttach : videojuego.getPlataformaCollection()) {
         plataformaCollectionPlataformaToAttach = em.getReference(plataformaCollectionPlataformaToAttach.getClass(), plataformaCollectionPlataformaToAttach.getNombrePlataforma());
         attachedPlataformaCollection.add(plataformaCollectionPlataformaToAttach);
       }
       videojuego.setPlataformaCollection(attachedPlataformaCollection);
-      Collection<ModoJuego> attachedModoJuegoCollection = new ArrayList<ModoJuego>();
+      List<ModoJuego> attachedModoJuegoCollection = new ArrayList<ModoJuego>();
       for (ModoJuego modoJuegoCollectionModoJuegoToAttach : videojuego.getModoJuegoCollection()) {
         modoJuegoCollectionModoJuegoToAttach = em.getReference(modoJuegoCollectionModoJuegoToAttach.getClass(), modoJuegoCollectionModoJuegoToAttach.getNombreModoJuego());
         attachedModoJuegoCollection.add(modoJuegoCollectionModoJuegoToAttach);
       }
       videojuego.setModoJuegoCollection(attachedModoJuegoCollection);
-      Collection<Dlc> attachedDlcCollection = new ArrayList<Dlc>();
+      List<Dlc> attachedDlcCollection = new ArrayList<Dlc>();
       for (Dlc dlcCollectionDlcToAttach : videojuego.getDlcCollection()) {
         dlcCollectionDlcToAttach = em.getReference(dlcCollectionDlcToAttach.getClass(), dlcCollectionDlcToAttach.getIdDlc());
         attachedDlcCollection.add(dlcCollectionDlcToAttach);
@@ -133,12 +132,12 @@ public class VideojuegoJpaController implements Serializable {
       Genero nombreGeneroNew = videojuego.getNombreGenero();
       Plataforma nombrePlataformaOld = persistentVideojuego.getNombrePlataforma();
       Plataforma nombrePlataformaNew = videojuego.getNombrePlataforma();
-      Collection<Plataforma> plataformaCollectionOld = persistentVideojuego.getPlataformaCollection();
-      Collection<Plataforma> plataformaCollectionNew = videojuego.getPlataformaCollection();
-      Collection<ModoJuego> modoJuegoCollectionOld = persistentVideojuego.getModoJuegoCollection();
-      Collection<ModoJuego> modoJuegoCollectionNew = videojuego.getModoJuegoCollection();
-      Collection<Dlc> dlcCollectionOld = persistentVideojuego.getDlcCollection();
-      Collection<Dlc> dlcCollectionNew = videojuego.getDlcCollection();
+      List<Plataforma> plataformaCollectionOld = persistentVideojuego.getPlataformaCollection();
+      List<Plataforma> plataformaCollectionNew = videojuego.getPlataformaCollection();
+      List<ModoJuego> modoJuegoCollectionOld = persistentVideojuego.getModoJuegoCollection();
+      List<ModoJuego> modoJuegoCollectionNew = videojuego.getModoJuegoCollection();
+      List<Dlc> dlcCollectionOld = persistentVideojuego.getDlcCollection();
+      List<Dlc> dlcCollectionNew = videojuego.getDlcCollection();
       List<String> illegalOrphanMessages = null;
       for (Dlc dlcCollectionOldDlc : dlcCollectionOld) {
         if (!dlcCollectionNew.contains(dlcCollectionOldDlc)) {
@@ -159,21 +158,21 @@ public class VideojuegoJpaController implements Serializable {
         nombrePlataformaNew = em.getReference(nombrePlataformaNew.getClass(), nombrePlataformaNew.getNombrePlataforma());
         videojuego.setNombrePlataforma(nombrePlataformaNew);
       }
-      Collection<Plataforma> attachedPlataformaCollectionNew = new ArrayList<Plataforma>();
+      List<Plataforma> attachedPlataformaCollectionNew = new ArrayList<Plataforma>();
       for (Plataforma plataformaCollectionNewPlataformaToAttach : plataformaCollectionNew) {
         plataformaCollectionNewPlataformaToAttach = em.getReference(plataformaCollectionNewPlataformaToAttach.getClass(), plataformaCollectionNewPlataformaToAttach.getNombrePlataforma());
         attachedPlataformaCollectionNew.add(plataformaCollectionNewPlataformaToAttach);
       }
       plataformaCollectionNew = attachedPlataformaCollectionNew;
       videojuego.setPlataformaCollection(plataformaCollectionNew);
-      Collection<ModoJuego> attachedModoJuegoCollectionNew = new ArrayList<ModoJuego>();
+      List<ModoJuego> attachedModoJuegoCollectionNew = new ArrayList<ModoJuego>();
       for (ModoJuego modoJuegoCollectionNewModoJuegoToAttach : modoJuegoCollectionNew) {
         modoJuegoCollectionNewModoJuegoToAttach = em.getReference(modoJuegoCollectionNewModoJuegoToAttach.getClass(), modoJuegoCollectionNewModoJuegoToAttach.getNombreModoJuego());
         attachedModoJuegoCollectionNew.add(modoJuegoCollectionNewModoJuegoToAttach);
       }
       modoJuegoCollectionNew = attachedModoJuegoCollectionNew;
       videojuego.setModoJuegoCollection(modoJuegoCollectionNew);
-      Collection<Dlc> attachedDlcCollectionNew = new ArrayList<Dlc>();
+      List<Dlc> attachedDlcCollectionNew = new ArrayList<Dlc>();
       for (Dlc dlcCollectionNewDlcToAttach : dlcCollectionNew) {
         dlcCollectionNewDlcToAttach = em.getReference(dlcCollectionNewDlcToAttach.getClass(), dlcCollectionNewDlcToAttach.getIdDlc());
         attachedDlcCollectionNew.add(dlcCollectionNewDlcToAttach);
@@ -262,7 +261,7 @@ public class VideojuegoJpaController implements Serializable {
         throw new NonexistentEntityException("The videojuego with id " + id + " no longer exists.", enfe);
       }
       List<String> illegalOrphanMessages = null;
-      Collection<Dlc> dlcCollectionOrphanCheck = videojuego.getDlcCollection();
+      List<Dlc> dlcCollectionOrphanCheck = videojuego.getDlcCollection();
       for (Dlc dlcCollectionOrphanCheckDlc : dlcCollectionOrphanCheck) {
         if (illegalOrphanMessages == null) {
           illegalOrphanMessages = new ArrayList<String>();
@@ -282,12 +281,12 @@ public class VideojuegoJpaController implements Serializable {
         nombrePlataforma.getVideojuegoCollection().remove(videojuego);
         nombrePlataforma = em.merge(nombrePlataforma);
       }
-      Collection<Plataforma> plataformaCollection = videojuego.getPlataformaCollection();
+      List<Plataforma> plataformaCollection = videojuego.getPlataformaCollection();
       for (Plataforma plataformaCollectionPlataforma : plataformaCollection) {
         plataformaCollectionPlataforma.getVideojuegoCollection().remove(videojuego);
         plataformaCollectionPlataforma = em.merge(plataformaCollectionPlataforma);
       }
-      Collection<ModoJuego> modoJuegoCollection = videojuego.getModoJuegoCollection();
+      List<ModoJuego> modoJuegoCollection = videojuego.getModoJuegoCollection();
       for (ModoJuego modoJuegoCollectionModoJuego : modoJuegoCollection) {
         modoJuegoCollectionModoJuego.getVideojuegoCollection().remove(videojuego);
         modoJuegoCollectionModoJuego = em.merge(modoJuegoCollectionModoJuego);
