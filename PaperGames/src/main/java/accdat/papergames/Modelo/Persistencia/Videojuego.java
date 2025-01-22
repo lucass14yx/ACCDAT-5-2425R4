@@ -20,12 +20,8 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -33,7 +29,6 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "VIDEOJUEGO")
-@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Videojuego.findAll", query = "SELECT v FROM Videojuego v"),
   @NamedQuery(name = "Videojuego.findByIdVideojuego", query = "SELECT v FROM Videojuego v WHERE v.idVideojuego = :idVideojuego"),
@@ -47,29 +42,19 @@ public class Videojuego implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @NotNull
   @GeneratedValue(generator = "secuencia_videojuego")
   @SequenceGenerator(name="secuencia_videojuego", sequenceName = "videojuego_sequence", allocationSize = 1)
-  @Column(name = "ID_VIDEOJUEGO")
   private Long idVideojuego;
 
   @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 200) // Tamaño máximo de 200 caracteres
-  @Column(name = "TITULO", nullable = false, length = 200)
   private String titulo;
 
-  @Lob
-  @Column(name = "DESCRIPCION")
   private String descripcion;
 
   @Basic(optional = false)
-  @NotNull
-  @Column(name = "AÑO", nullable = false)
   private short año;
 
   @Basic(optional = false)
-  @NotNull
   @Column(name = "PEGI", nullable = false)
   private short pegi; // 3 - 7 - 12 - 16 - 18
 
@@ -77,13 +62,13 @@ public class Videojuego implements Serializable {
       @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
       @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")})
   @ManyToMany
-  private Collection<Plataforma> plataformaCollection;
+  private List<Plataforma> plataformaCollection;
 
   @JoinTable(name = "VIDEOJUEGO_MODO_JUEGO", joinColumns = {
       @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
       @JoinColumn(name = "NOMBRE_MODO_JUEGO", referencedColumnName = "NOMBRE_MODO_JUEGO")})
   @ManyToMany
-  private Collection<ModoJuego> modoJuegoCollection;
+  private List<ModoJuego> modoJuegoCollection;
 
   @JoinColumn(name = "NOMBRE_GENERO", referencedColumnName = "NOMBRE_GENERO")
   @ManyToOne
@@ -94,7 +79,7 @@ public class Videojuego implements Serializable {
   private Plataforma nombrePlataforma;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVideojuego")
-  private Collection<Dlc> dlcCollection;
+  private List<Dlc> dlcCollection;
 
   public Videojuego() {
   }
@@ -150,21 +135,19 @@ public class Videojuego implements Serializable {
     this.pegi = pegi;
   }
 
-  @XmlTransient
-  public Collection<Plataforma> getPlataformaCollection() {
+  public List<Plataforma> getPlataformaCollection() {
     return plataformaCollection;
   }
 
-  public void setPlataformaCollection(Collection<Plataforma> plataformaCollection) {
+  public void setPlataformaCollection(List<Plataforma> plataformaCollection) {
     this.plataformaCollection = plataformaCollection;
   }
 
-  @XmlTransient
-  public Collection<ModoJuego> getModoJuegoCollection() {
+  public List<ModoJuego> getModoJuegoCollection() {
     return modoJuegoCollection;
   }
 
-  public void setModoJuegoCollection(Collection<ModoJuego> modoJuegoCollection) {
+  public void setModoJuegoCollection(List<ModoJuego> modoJuegoCollection) {
     this.modoJuegoCollection = modoJuegoCollection;
   }
 
@@ -184,12 +167,11 @@ public class Videojuego implements Serializable {
     this.nombrePlataforma = nombrePlataforma;
   }
 
-  @XmlTransient
-  public Collection<Dlc> getDlcCollection() {
+  public List<Dlc> getDlcCollection() {
     return dlcCollection;
   }
 
-  public void setDlcCollection(Collection<Dlc> dlcCollection) {
+  public void setDlcCollection(List<Dlc> dlcCollection) {
     this.dlcCollection = dlcCollection;
   }
 

@@ -17,7 +17,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -198,8 +197,8 @@ public class CollectData {
   }
   
  //------------------------------------------------------------------------------------------------->
-  private static Collection<Plataforma> agregarPlataformasJuego (Videojuego inputJuego, List<String> inputListaPlataforma) {
-    Collection<Plataforma> listaPlataformas = new ArrayList<>();
+  private static List<Plataforma> agregarPlataformasJuego (Videojuego inputJuego, List<String> inputListaPlataforma) {
+    List<Plataforma> listaPlataformas = new ArrayList<>();
     
     for (String aux : inputListaPlataforma) {
       Plataforma platAux = platController.findPlataforma(aux);
@@ -211,8 +210,8 @@ public class CollectData {
     return listaPlataformas;
   }
   
-  private static Collection<ModoJuego> agregarModosJuegoJuego (Videojuego inputJuego, List<String> inputListaModoJuego) {
-    Collection<ModoJuego> listaModosJuego = new ArrayList<>();
+  private static List<ModoJuego> agregarModosJuegoJuego (Videojuego inputJuego, List<String> inputListaModoJuego) {
+    List<ModoJuego> listaModosJuego = new ArrayList<>();
     
     for (String aux : inputListaModoJuego) {
       ModoJuego platAux = modoJuegoController.findModoJuego(aux);

@@ -5,7 +5,6 @@
 package accdat.papergames.Modelo.Persistencia;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -13,12 +12,9 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.Collection;
+
+import java.util.List;
 
 /**
  *
@@ -26,7 +22,6 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "PLATAFORMA")
-@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Plataforma.findAll", query = "SELECT p FROM Plataforma p"),
   @NamedQuery(name = "Plataforma.findByNombrePlataforma", query = "SELECT p FROM Plataforma p WHERE p.nombrePlataforma = :nombrePlataforma"),
@@ -36,22 +31,16 @@ public class Plataforma implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 100) // Refleja el tamaño máximo definido en el script SQL
-  @Column(name = "NOMBRE_PLATAFORMA", nullable = false, length = 100)
   private String nombrePlataforma;
 
   @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 50) // Refleja el tamaño máximo definido en el script SQL
-  @Column(name = "TIPO", nullable = false, length = 50)
   private String tipo;
 
   @ManyToMany(mappedBy = "plataformaCollection")
-  private Collection<Videojuego> videojuegoCollection;
+  private List<Videojuego> videojuegoCollection;
 
   @OneToMany(mappedBy = "nombrePlataforma")
-  private Collection<Videojuego> videojuegoCollection1;
+  private List<Videojuego> videojuegoCollection1;
 
   public Plataforma() {
   }
@@ -81,21 +70,21 @@ public class Plataforma implements Serializable {
     this.tipo = tipo;
   }
 
-  @XmlTransient
-  public Collection<Videojuego> getVideojuegoCollection() {
+
+  public List<Videojuego> getVideojuegoCollection() {
     return videojuegoCollection;
   }
 
-  public void setVideojuegoCollection(Collection<Videojuego> videojuegoCollection) {
+  public void setVideojuegoCollection(List<Videojuego> videojuegoCollection) {
     this.videojuegoCollection = videojuegoCollection;
   }
 
-  @XmlTransient
-  public Collection<Videojuego> getVideojuegoCollection1() {
+
+  public List<Videojuego> getVideojuegoCollection1() {
     return videojuegoCollection1;
   }
 
-  public void setVideojuegoCollection1(Collection<Videojuego> videojuegoCollection1) {
+  public void setVideojuegoCollection1(List<Videojuego> videojuegoCollection1) {
     this.videojuegoCollection1 = videojuegoCollection1;
   }
 

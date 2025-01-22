@@ -16,7 +16,7 @@ import accdat.papergames.Modelo.Persistencia.Videojuego;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.List;
 
 /**
@@ -42,7 +42,7 @@ public class ModoJuegoJpaController implements Serializable {
     try {
       em = getEntityManager();
       em.getTransaction().begin();
-      Collection<Videojuego> attachedVideojuegoCollection = new ArrayList<Videojuego>();
+      List<Videojuego> attachedVideojuegoCollection = new ArrayList<Videojuego>();
       for (Videojuego videojuegoCollectionVideojuegoToAttach : modoJuego.getVideojuegoCollection()) {
         videojuegoCollectionVideojuegoToAttach = em.getReference(videojuegoCollectionVideojuegoToAttach.getClass(), videojuegoCollectionVideojuegoToAttach.getIdVideojuego());
         attachedVideojuegoCollection.add(videojuegoCollectionVideojuegoToAttach);
@@ -72,9 +72,9 @@ public class ModoJuegoJpaController implements Serializable {
       em = getEntityManager();
       em.getTransaction().begin();
       ModoJuego persistentModoJuego = em.find(ModoJuego.class, modoJuego.getNombreModoJuego());
-      Collection<Videojuego> videojuegoCollectionOld = persistentModoJuego.getVideojuegoCollection();
-      Collection<Videojuego> videojuegoCollectionNew = modoJuego.getVideojuegoCollection();
-      Collection<Videojuego> attachedVideojuegoCollectionNew = new ArrayList<Videojuego>();
+      List<Videojuego> videojuegoCollectionOld = persistentModoJuego.getVideojuegoCollection();
+      List<Videojuego> videojuegoCollectionNew = modoJuego.getVideojuegoCollection();
+      List<Videojuego> attachedVideojuegoCollectionNew = new ArrayList<Videojuego>();
       for (Videojuego videojuegoCollectionNewVideojuegoToAttach : videojuegoCollectionNew) {
         videojuegoCollectionNewVideojuegoToAttach = em.getReference(videojuegoCollectionNewVideojuegoToAttach.getClass(), videojuegoCollectionNewVideojuegoToAttach.getIdVideojuego());
         attachedVideojuegoCollectionNew.add(videojuegoCollectionNewVideojuegoToAttach);
@@ -123,7 +123,7 @@ public class ModoJuegoJpaController implements Serializable {
       } catch (EntityNotFoundException enfe) {
         throw new NonexistentEntityException("The modoJuego with id " + id + " no longer exists.", enfe);
       }
-      Collection<Videojuego> videojuegoCollection = modoJuego.getVideojuegoCollection();
+      List<Videojuego> videojuegoCollection = modoJuego.getVideojuegoCollection();
       for (Videojuego videojuegoCollectionVideojuego : videojuegoCollection) {
         videojuegoCollectionVideojuego.getModoJuegoCollection().remove(modoJuego);
         videojuegoCollectionVideojuego = em.merge(videojuegoCollectionVideojuego);
