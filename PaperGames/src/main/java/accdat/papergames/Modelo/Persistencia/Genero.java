@@ -31,7 +31,6 @@ public class Genero implements Serializable {
   @Id
   @Basic(optional = false)
 
-  @Column(name = "NOMBRE_GENERO", nullable = false, length = 100)
   private String nombreGenero;
 
   @OneToMany(mappedBy = "nombreGenero")

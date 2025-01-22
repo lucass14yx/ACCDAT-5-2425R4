@@ -37,22 +37,17 @@ public class Dlc implements Serializable {
   @Basic(optional = false)
   @GeneratedValue(generator = "secuencia_dlc")
   @SequenceGenerator(name="secuencia_dlc", sequenceName = "dlc_sequence", allocationSize = 1)
-  @Column(name = "ID_DLC")
   private Long idDlc;
 
   @Basic(optional = false)
 
 
-  @Column(name = "TITULO", nullable = false, length = 200)
   private String titulo;
 
-  @Lob
-  @Column(name = "DESCRIPCION")
   private String descripcion;
 
   @Basic(optional = false)
   
-  @Column(name = "PRECIO", nullable = false, precision = 10, scale = 2)
   private BigDecimal precio;
 
   @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO", nullable = false)
