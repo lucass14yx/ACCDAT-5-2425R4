@@ -12,7 +12,6 @@ import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import accdat.papergames.Vista.InterfazVista;
-import accdat.papergames.Vista.VentanaModVideojuego;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
