@@ -16,8 +16,8 @@ import accdat.papergames.exceptions.PreexistingEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
 
 /**
  *
@@ -45,13 +45,13 @@ public class PlataformaJpaController implements Serializable {
     try {
       em = getEntityManager();
       em.getTransaction().begin();
-      Collection<Videojuego> attachedVideojuegoCollection = new ArrayList<Videojuego>();
+      List<Videojuego> attachedVideojuegoCollection = new ArrayList<Videojuego>();
       for (Videojuego videojuegoCollectionVideojuegoToAttach : plataforma.getVideojuegoCollection()) {
         videojuegoCollectionVideojuegoToAttach = em.getReference(videojuegoCollectionVideojuegoToAttach.getClass(), videojuegoCollectionVideojuegoToAttach.getIdVideojuego());
         attachedVideojuegoCollection.add(videojuegoCollectionVideojuegoToAttach);
       }
       plataforma.setVideojuegoCollection(attachedVideojuegoCollection);
-      Collection<Videojuego> attachedVideojuegoCollection1 = new ArrayList<Videojuego>();
+      List<Videojuego> attachedVideojuegoCollection1 = new ArrayList<Videojuego>();
       for (Videojuego videojuegoCollection1VideojuegoToAttach : plataforma.getVideojuegoCollection1()) {
         videojuegoCollection1VideojuegoToAttach = em.getReference(videojuegoCollection1VideojuegoToAttach.getClass(), videojuegoCollection1VideojuegoToAttach.getIdVideojuego());
         attachedVideojuegoCollection1.add(videojuegoCollection1VideojuegoToAttach);
@@ -90,18 +90,18 @@ public class PlataformaJpaController implements Serializable {
       em = getEntityManager();
       em.getTransaction().begin();
       Plataforma persistentPlataforma = em.find(Plataforma.class, plataforma.getNombrePlataforma());
-      Collection<Videojuego> videojuegoCollectionOld = persistentPlataforma.getVideojuegoCollection();
-      Collection<Videojuego> videojuegoCollectionNew = plataforma.getVideojuegoCollection();
-      Collection<Videojuego> videojuegoCollection1Old = persistentPlataforma.getVideojuegoCollection1();
-      Collection<Videojuego> videojuegoCollection1New = plataforma.getVideojuegoCollection1();
-      Collection<Videojuego> attachedVideojuegoCollectionNew = new ArrayList<Videojuego>();
+      List<Videojuego> videojuegoCollectionOld = persistentPlataforma.getVideojuegoCollection();
+      List<Videojuego> videojuegoCollectionNew = plataforma.getVideojuegoCollection();
+      List<Videojuego> videojuegoCollection1Old = persistentPlataforma.getVideojuegoCollection1();
+      List<Videojuego> videojuegoCollection1New = plataforma.getVideojuegoCollection1();
+      List<Videojuego> attachedVideojuegoCollectionNew = new ArrayList<Videojuego>();
       for (Videojuego videojuegoCollectionNewVideojuegoToAttach : videojuegoCollectionNew) {
         videojuegoCollectionNewVideojuegoToAttach = em.getReference(videojuegoCollectionNewVideojuegoToAttach.getClass(), videojuegoCollectionNewVideojuegoToAttach.getIdVideojuego());
         attachedVideojuegoCollectionNew.add(videojuegoCollectionNewVideojuegoToAttach);
       }
       videojuegoCollectionNew = attachedVideojuegoCollectionNew;
       plataforma.setVideojuegoCollection(videojuegoCollectionNew);
-      Collection<Videojuego> attachedVideojuegoCollection1New = new ArrayList<Videojuego>();
+      List<Videojuego> attachedVideojuegoCollection1New = new ArrayList<Videojuego>();
       for (Videojuego videojuegoCollection1NewVideojuegoToAttach : videojuegoCollection1New) {
         videojuegoCollection1NewVideojuegoToAttach = em.getReference(videojuegoCollection1NewVideojuegoToAttach.getClass(), videojuegoCollection1NewVideojuegoToAttach.getIdVideojuego());
         attachedVideojuegoCollection1New.add(videojuegoCollection1NewVideojuegoToAttach);
@@ -167,12 +167,12 @@ public class PlataformaJpaController implements Serializable {
       } catch (EntityNotFoundException enfe) {
         throw new NonexistentEntityException("The plataforma with id " + id + " no longer exists.", enfe);
       }
-      Collection<Videojuego> videojuegoCollection = plataforma.getVideojuegoCollection();
+      List<Videojuego> videojuegoCollection = plataforma.getVideojuegoCollection();
       for (Videojuego videojuegoCollectionVideojuego : videojuegoCollection) {
         videojuegoCollectionVideojuego.getPlataformaCollection().remove(plataforma);
         videojuegoCollectionVideojuego = em.merge(videojuegoCollectionVideojuego);
       }
-      Collection<Videojuego> videojuegoCollection1 = plataforma.getVideojuegoCollection1();
+      List<Videojuego> videojuegoCollection1 = plataforma.getVideojuegoCollection1();
       for (Videojuego videojuegoCollection1Videojuego : videojuegoCollection1) {
         videojuegoCollection1Videojuego.setNombrePlataforma(null);
         videojuegoCollection1Videojuego = em.merge(videojuegoCollection1Videojuego);
