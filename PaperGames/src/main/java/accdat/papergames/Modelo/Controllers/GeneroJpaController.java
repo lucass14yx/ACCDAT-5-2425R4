@@ -16,7 +16,6 @@ import accdat.papergames.exceptions.PreexistingEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,7 +41,7 @@ public class GeneroJpaController implements Serializable {
     try {
       em = getEntityManager();
       em.getTransaction().begin();
-      Collection<Videojuego> attachedVideojuegoCollection = new ArrayList<Videojuego>();
+      List<Videojuego> attachedVideojuegoCollection = new ArrayList<Videojuego>();
       for (Videojuego videojuegoCollectionVideojuegoToAttach : genero.getVideojuegoCollection()) {
         videojuegoCollectionVideojuegoToAttach = em.getReference(videojuegoCollectionVideojuegoToAttach.getClass(), videojuegoCollectionVideojuegoToAttach.getIdVideojuego());
         attachedVideojuegoCollection.add(videojuegoCollectionVideojuegoToAttach);
@@ -77,9 +76,9 @@ public class GeneroJpaController implements Serializable {
       em = getEntityManager();
       em.getTransaction().begin();
       Genero persistentGenero = em.find(Genero.class, genero.getNombreGenero());
-      Collection<Videojuego> videojuegoCollectionOld = persistentGenero.getVideojuegoCollection();
-      Collection<Videojuego> videojuegoCollectionNew = genero.getVideojuegoCollection();
-      Collection<Videojuego> attachedVideojuegoCollectionNew = new ArrayList<Videojuego>();
+      List<Videojuego> videojuegoCollectionOld = persistentGenero.getVideojuegoCollection();
+      List<Videojuego> videojuegoCollectionNew = genero.getVideojuegoCollection();
+      List<Videojuego> attachedVideojuegoCollectionNew = new ArrayList<Videojuego>();
       for (Videojuego videojuegoCollectionNewVideojuegoToAttach : videojuegoCollectionNew) {
         videojuegoCollectionNewVideojuegoToAttach = em.getReference(videojuegoCollectionNewVideojuegoToAttach.getClass(), videojuegoCollectionNewVideojuegoToAttach.getIdVideojuego());
         attachedVideojuegoCollectionNew.add(videojuegoCollectionNewVideojuegoToAttach);
@@ -133,7 +132,7 @@ public class GeneroJpaController implements Serializable {
       } catch (EntityNotFoundException enfe) {
         throw new NonexistentEntityException("The genero with id " + id + " no longer exists.", enfe);
       }
-      Collection<Videojuego> videojuegoCollection = genero.getVideojuegoCollection();
+      List<Videojuego> videojuegoCollection = genero.getVideojuegoCollection();
       for (Videojuego videojuegoCollectionVideojuego : videojuegoCollection) {
         videojuegoCollectionVideojuego.setNombreGenero(null);
         videojuegoCollectionVideojuego = em.merge(videojuegoCollectionVideojuego);
