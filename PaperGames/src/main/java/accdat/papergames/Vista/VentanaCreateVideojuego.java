@@ -19,7 +19,6 @@ import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.Popup;
@@ -41,8 +40,8 @@ public class VentanaCreateVideojuego extends javax.swing.JFrame implements Inter
   private String generoSelected;
   private int anioSalida;
   private int pegiSelected;
-  private Collection<Plataforma> listaPlataformasSelected = new ArrayList<>();
-  private Collection<ModoJuego> listaModosJuegoSelected = new ArrayList<>();
+  private List<Plataforma> listaPlataformasSelected = new ArrayList<>();
+  private List<ModoJuego> listaModosJuegoSelected = new ArrayList<>();
   
   private List<Checkbox> listaPlataformasCheckbox = new ArrayList<>();
   private List<Checkbox> listaModosJuegoCheckbox = new ArrayList<>();
