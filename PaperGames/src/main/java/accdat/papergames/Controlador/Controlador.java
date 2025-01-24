@@ -200,5 +200,10 @@ public class Controlador implements ActionListener{
   }
   
  //-------------------------------------------------------------------------------------------------------------->
-  
+  public void cargarDatosBBDD () {
+    this.cargaDeDatos.generarGeneros();
+    this.cargaDeDatos.generarModosJuego();
+    this.cargaDeDatos.generarPlataformas();
+    this.cargaDeDatos.generarVideojuegos();
+  }
 }
