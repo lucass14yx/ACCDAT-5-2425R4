@@ -9,7 +9,6 @@ import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.swing.JScrollPane;
 
@@ -242,27 +241,39 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     
   }
   
-  private List<String> extraerNombrePlataformas (Collection<Plataforma> inputListaPlataformas) {
+  private List<String> extraerNombrePlataformas(List<Plataforma> inputListaPlataformas) {
+    if (inputListaPlataformas == null) {
+      return new ArrayList<>(); // Retorna lista vacía
+    }
     List<String> listaNombrePlataformas = new ArrayList<>();
     for (Plataforma aux : inputListaPlataformas) {
       listaNombrePlataformas.add(aux.getNombrePlataforma());
     }
     return listaNombrePlataformas;
   }
-  private List<String> extraerNombreModosJuego (Collection<ModoJuego> inputListaModosJuego) {
+
+  private List<String> extraerNombreModosJuego(List<ModoJuego> inputListaModosJuego) {
+    if (inputListaModosJuego == null) {
+      return new ArrayList<>(); // Retorna lista vacía
+    }
     List<String> listaNombreModosJuego = new ArrayList<>();
     for (ModoJuego aux : inputListaModosJuego) {
       listaNombreModosJuego.add(aux.getNombreModoJuego());
     }
     return listaNombreModosJuego;
   }
-  private List<String> extraerNombreListaDLC (Collection<Dlc> inputListaDlc) {
+
+  private List<String> extraerNombreListaDLC(List<Dlc> inputListaDlc) {
+    if (inputListaDlc == null) {
+      return new ArrayList<>(); // Retorna lista vacía
+    }
     List<String> listaNombreDLC = new ArrayList<>();
     for (Dlc aux : inputListaDlc) {
       listaNombreDLC.add(aux.getTitulo());
     }
     return listaNombreDLC;
   }
+
   
  //------------------------------------------------------------------------------->
    // getters & setters ->

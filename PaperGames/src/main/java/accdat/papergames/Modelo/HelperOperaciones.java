@@ -37,7 +37,16 @@ public class HelperOperaciones {
  //----------------------------------------------------------------------------------------->
    // constructores -> 
   public HelperOperaciones () {
-    emFactory = Persistence.createEntityManagerFactory("accdat_PaperGames_jar_1.0-SNAPSHOTPU");
+    try {
+          // Intenta conectar al servidor ObjectDB
+          emFactory = Persistence.createEntityManagerFactory("objectdb://localhost/proyecto.odb;user=admin;password=admin");
+          System.out.println("Conexión establecida con el servidor ObjectDB.");
+      } catch (Exception e) {
+          // Si falla, usa la versión embebida
+          System.err.println("No se pudo conectar al servidor ObjectDB. " +
+                             "Se utilizará la base de datos embebida. Error: " + e.getMessage());
+          emFactory = Persistence.createEntityManagerFactory("./db/proyecto.odb");
+      }
     vController = new VideojuegoJpaController(emFactory);
     pController = new PlataformaJpaController(emFactory);
     gController = new GeneroJpaController(emFactory);
@@ -52,7 +61,16 @@ public class HelperOperaciones {
   }
   
   private void abrirConexion () {
-    emFactory = Persistence.createEntityManagerFactory("accdat_PaperGames_jar_1.0-SNAPSHOTPU");
+    try {
+      // Intenta conectar al servidor ObjectDB
+      emFactory = Persistence.createEntityManagerFactory("objectdb://localhost/proyecto.odb;user=admin;password=admin");
+      System.out.println("Conexión establecida con el servidor ObjectDB.");
+    } catch (Exception e) {
+      // Si falla, usa la versión embebida
+      System.err.println("No se pudo conectar al servidor ObjectDB. " +
+              "Se utilizará la base de datos embebida. Error: " + e.getMessage());
+      emFactory = Persistence.createEntityManagerFactory("./db/proyecto.odb");
+    }
   }
   
   private void cerrarConexion () {

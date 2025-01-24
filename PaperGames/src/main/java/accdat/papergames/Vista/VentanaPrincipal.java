@@ -321,6 +321,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
 
   private void btnCargarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarDatosActionPerformed
     btnCargarDatos.setActionCommand(CARGAR_DATOS);
+    this.controlador.cargarDatosBBDD();
   }//GEN-LAST:event_btnCargarDatosActionPerformed
 
   /**
