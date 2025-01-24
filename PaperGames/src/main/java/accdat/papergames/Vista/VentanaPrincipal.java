@@ -542,7 +542,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
     List<Videojuego> listaJuegosFiltrosPEGI = new ArrayList<>();
     
     if (filtrosPlataformas.isEmpty() && filtrosGeneros.isEmpty() && filtrosModosJuego.isEmpty() && filtrosPEGI.isEmpty()) {
-      listaVideojuegosFinal = this.controlador.cargarVideojuegos();  
+      listaVideojuegosFinal = this.controlador.cargarVideojuegos();
     } else {
       if (!filtrosPlataformas.isEmpty()) {
         listaJuegosFiltrosPlataforma = this.controlador.recuperarJuegosFiltroPlataformas(filtrosPlataformas);

@@ -137,6 +137,12 @@ public class FiltrosBBDD_JPQL {
                .setParameter("pegi", inputPEGI)
                .getResultList();
   }
+  
+  public List<Videojuego> consultarTodosVideojuegos () {
+      abrirFactory();
+      String jpl = "SELECT v FROM Videojuego v";
+      return entityManager.createQuery(jpl, Videojuego.class).getResultList();
+  }
 
   
  //------------------------------------------------------------------------------->

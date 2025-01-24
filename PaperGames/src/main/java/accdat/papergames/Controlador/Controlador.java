@@ -74,7 +74,7 @@ public class Controlador implements ActionListener{
    // metodos publicos | complementarios ->
     // metodo | cargarVideojuegos ->
   public List<Videojuego> cargarVideojuegos () {
-    return this.modeloOperaciones.devolverListaVideojuegos();
+    return this.modeloFiltrosJPQL.consultarTodosVideojuegos();
   }
   public List<String> cargarNombresVideojuegos () {
     List<String> listaVideojuegos = new ArrayList<>();
@@ -183,7 +183,7 @@ public class Controlador implements ActionListener{
   
   public List<Videojuego> recuperarJuegosFiltroPEGI (List<Integer> inputListaFiltros) {
     List<Videojuego> listaVideojuegosFiltrada = new ArrayList<>();
-    listaVideojuegosFiltrada = modeloFiltros.consultaVideojuegoPorPEGI(inputListaFiltros);
+    listaVideojuegosFiltrada = modeloFiltrosJPQL.consultaVideojuegoPorPEGI(inputListaFiltros);
     return listaVideojuegosFiltrada;
   }
   
