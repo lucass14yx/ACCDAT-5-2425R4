@@ -22,6 +22,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -409,4 +410,36 @@ public class VideojuegoJpaController implements Serializable {
       return listaPegi.stream().collect(Collectors.toList());
   }
 
+  public List<Videojuego> consultaVideojuegoPorPlataformaNamedQuery(List<String> inputPlataformas) {
+    EntityManager entityManager = emf.createEntityManager();
+    
+    if (inputPlataformas == null || inputPlataformas.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    try {
+      return entityManager.createNamedQuery("Videojuego.findByPlataformas", Videojuego.class)
+              .setParameter("plataformas", inputPlataformas)
+              .getResultList();
+    } catch (Exception e) {
+      return Collections.emptyList();
+    }
+  }
+
+
+  public List<Videojuego> consultaVideojuegoPorModoJuegoNamedQuery(List<String> inputModosJuego) {
+    EntityManager entityManager = emf.createEntityManager();
+    
+    if (inputModosJuego == null || inputModosJuego.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    try {
+      return entityManager.createNamedQuery("Videojuego.findByModosJuego", Videojuego.class)
+              .setParameter("modosJuego", inputModosJuego)
+              .getResultList();
+    } catch (Exception e) {
+      return Collections.emptyList();
+    }
+  }
 }

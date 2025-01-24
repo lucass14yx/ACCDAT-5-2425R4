@@ -82,44 +82,54 @@ public class FiltrosBBDD_JPQL {
   }
 
   
-    // metodo publico | consultaVideojuegoPorPlataforma =>
-  public List<Videojuego> consultaVideojuegoPorPlataforma(List<String> inputPlataformas) {
-      String jpql = """
-                    SELECT DISTINCT v FROM Videojuego v 
-                    JOIN v.plataformaCollection p 
-                    WHERE p.nombrePlataforma IN :plataformas
-                    """;
-      return entityManager.createQuery(jpql, Videojuego.class)
-               .setParameter("plataformas", inputPlataformas)
-               .getResultList();
-  }
+     /**
+     * Consulta Videojuegos por Plataformas.
+     *
+     * @param inputPlataformas Lista de nombres de plataformas a filtrar.
+     * @return Lista de Videojuegos que coinciden con al menos una de las plataformas.
+     */
+    public List<Videojuego> consultaVideojuegoPorPlataforma(List<String> inputPlataformas) {
+      if (inputPlataformas == null || inputPlataformas.isEmpty()) {
+        return Collections.emptyList();
+      }
 
-  
-    // metodo publico | consultaVideojuegoPorModoJuego =>
+      String jpql = "SELECT DISTINCT v FROM Videojuego v " +
+                    "JOIN v.plataformaCollection p " +
+                    "WHERE p.nombrePlataforma IN :plataformas";
+
+      try {
+        return entityManager.createQuery(jpql, Videojuego.class)
+                            .setParameter("plataformas", inputPlataformas)
+                            .getResultList();
+      } catch (Exception e) {
+        return Collections.emptyList();
+      }
+    }
+
+    /**
+     * Consulta Videojuegos por Modos de Juego.
+     *
+     * @param inputModosJuego Lista de nombres de modos de juego a filtrar.
+     * @return Lista de Videojuegos que coinciden con al menos uno de los modos de juego.
+     */
   public List<Videojuego> consultaVideojuegoPorModoJuego(List<String> inputModosJuego) {
-    abrirFactory();
-    if (inputModosJuego == null || inputModosJuego.isEmpty()) {
-      return Collections.emptyList();
-    }
+      if (inputModosJuego == null || inputModosJuego.isEmpty()) {
+        return Collections.emptyList();
+      }
 
-    String jpql = """
-                  SELECT v FROM Videojuego v
-                  WHERE EXISTS (
-                    SELECT 1 FROM v.modoJuegoCollection m
-                    WHERE m.nombreModoJuego IN :modosJuego
-                  )
-                """;
+      String jpql = "SELECT DISTINCT v FROM Videojuego v " +
+                    "JOIN v.modoJuegoCollection m " +
+                    "WHERE m.nombreModoJuego IN :modosJuego";
 
-    try {
-      return entityManager.createQuery(jpql, Videojuego.class)
-                 .setParameter("modosJuego", inputModosJuego)
-                 .getResultList();
-    } catch (Exception e) {
-      e.printStackTrace(); // O usa un logger
-      return Collections.emptyList();
-    }
+      try {
+        return entityManager.createQuery(jpql, Videojuego.class)
+                            .setParameter("modosJuego", inputModosJuego)
+                            .getResultList();
+      } catch (Exception e) {
+        return Collections.emptyList();
+      }
   }
-  
+
     // metodo publico | consultaVideojuegoPorPEGI =>
   public List<Videojuego> consultaVideojuegoPorPEGI(List<Integer> inputPEGI) {
       String jpql = "SELECT v FROM Videojuego v WHERE v.pegi IN :pegi";
