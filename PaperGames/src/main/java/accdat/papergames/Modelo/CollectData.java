@@ -22,34 +22,61 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author rezzt
  * utilizar solo la primera vez que se incie el proyecto, para cargar los datos en la bbdd
  */
 public class CollectData {
-   // constantes & variables ->
-    // entityManager =>
-  private static EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("accdat_PaperGames_jar_1.0-SNAPSHOTPU");
+
+  //--------------------------------------------------------------------------------
+  // 1) Definir la EntityManagerFactory y Controladores como static para que existan 
+  //    a nivel de clase (como ya lo hacías).
   
-    // controladores persistencia =>
-  private static DlcJpaController dlcController = new DlcJpaController(emFactory);
-  private static GeneroJpaController genController = new GeneroJpaController(emFactory);
-  private static ModoJuegoJpaController modoJuegoController = new ModoJuegoJpaController(emFactory);
-  private static PlataformaJpaController platController = new PlataformaJpaController(emFactory);
-  private static VideojuegoJpaController videojuegoController = new VideojuegoJpaController(emFactory);
+  private static EntityManagerFactory emFactory;
   
+  private static DlcJpaController dlcController;
+  private static GeneroJpaController genController;
+  private static ModoJuegoJpaController modoJuegoController;
+  private static PlataformaJpaController platController;
+  private static VideojuegoJpaController videojuegoController;
   
- //------------------------------------------------------------------------------------------------->
-   // metodo complementario | generarGeneros ->
-  public void generarGeneros () {
+  //--------------------------------------------------------------------------------
+  // 2) Inicializar todo en un bloque estático (o en el constructor, según convenga).
+  //    Se intenta la conexión con el servidor y si falla, se usa la embebida.
+
+  static {
+    try {
+      // Intenta conectarse al servidor de ObjectDB
+      emFactory = Persistence.createEntityManagerFactory(
+        "objectdb://localhost/proyecto.odb;user=admin;password=admin"
+      );
+      System.out.println("Conexión establecida con el servidor ObjectDB.");
+    } catch (Exception e) {
+      // Si falla, se crea la conexión embebida
+      System.err.println("No se pudo conectar al servidor ObjectDB. "
+                       + "Se utilizará la base de datos embebida. Error: " 
+                       + e.getMessage());
+      emFactory = Persistence.createEntityManagerFactory("./db/proyecto.odb");
+    }
+
+    // Inicialización de los controladores
+    dlcController = new DlcJpaController(emFactory);
+    genController = new GeneroJpaController(emFactory);
+    modoJuegoController = new ModoJuegoJpaController(emFactory);
+    platController = new PlataformaJpaController(emFactory);
+    videojuegoController = new VideojuegoJpaController(emFactory);
+  }
+  
+  //--------------------------------------------------------------------------------
+  // 3) Resto de métodos que ya tenías para generar datos y guardarlos en BBDD
+
+  public void generarGeneros() {
     List<Genero> listaCrearGeneros = new ArrayList<>();
     int contInserts = 0;
     
-    Genero genShooter = new Genero("Shooter");
-    Genero genSandbox = new Genero("Sandbox");
-    Genero genTerror = new Genero("Terror");
-    Genero genMOBA = new Genero("MOBA");
-    Genero genCarreras = new Genero("Carreras");
+    Genero genShooter   = new Genero("Shooter");
+    Genero genSandbox   = new Genero("Sandbox");
+    Genero genTerror    = new Genero("Terror");
+    Genero genMOBA      = new Genero("MOBA");
+    Genero genCarreras  = new Genero("Carreras");
     
     listaCrearGeneros.add(genCarreras);
     listaCrearGeneros.add(genShooter);
@@ -70,15 +97,15 @@ public class CollectData {
   }
   
   
-  public void generarModosJuego () {
+  public void generarModosJuego() {
     List<ModoJuego> listaCrearModosJuego = new ArrayList<>();
     int contInserts = 0;
     
-    ModoJuego mjMultijugador = new ModoJuego("Multijugador");
-    ModoJuego mjSingleplayer = new ModoJuego("Singleplayer");
-    ModoJuego mjCooperativo = new ModoJuego("Cooperativo");
-    ModoJuego mjLocal = new ModoJuego("Local");
-    ModoJuego mjSesionCompartida = new ModoJuego("Sesion Compartida");
+    ModoJuego mjMultijugador    = new ModoJuego("Multijugador");
+    ModoJuego mjSingleplayer    = new ModoJuego("Singleplayer");
+    ModoJuego mjCooperativo     = new ModoJuego("Cooperativo");
+    ModoJuego mjLocal           = new ModoJuego("Local");
+    ModoJuego mjSesionCompartida= new ModoJuego("Sesion Compartida");
     
     listaCrearModosJuego.add(mjMultijugador);
     listaCrearModosJuego.add(mjSingleplayer);
@@ -99,17 +126,17 @@ public class CollectData {
   }
   
   
-  public void generarPlataformas () {
+  public void generarPlataformas() {
     List<Plataforma> listaCrearPlataformas = new ArrayList<>();
     int contInserts = 0;
     
-    Plataforma pWindows = new Plataforma("Windows", "PC");
-    Plataforma pMax = new Plataforma("Mac", "PC");
-    Plataforma pLinux = new Plataforma("Linux", "PC");
+    Plataforma pWindows     = new Plataforma("Windows", "PC");
+    Plataforma pMax         = new Plataforma("Mac", "PC");
+    Plataforma pLinux       = new Plataforma("Linux", "PC");
     Plataforma pPlaystation = new Plataforma("PlayStation", "Consola");
-    Plataforma pXBox = new Plataforma("XBox", "Consola");
-    Plataforma pAndroid = new Plataforma("Android", "Mobile");
-    Plataforma pIos = new Plataforma("iOS", "Mobile");
+    Plataforma pXBox        = new Plataforma("XBox", "Consola");
+    Plataforma pAndroid     = new Plataforma("Android", "Mobile");
+    Plataforma pIos         = new Plataforma("iOS", "Mobile");
     
     listaCrearPlataformas.add(pWindows);
     listaCrearPlataformas.add(pMax);
@@ -132,39 +159,39 @@ public class CollectData {
   }
   
   
-  public void generarVideojuegos () {
+  public void generarVideojuegos() {
     List<Videojuego> listaCrearVideojuegos = new ArrayList<>();
     int contInserts = 0;
     
-    Videojuego minecraft = new Videojuego(toLong(0), "Minecraft", toShort(2011), toShort(7));
-    Videojuego counterStrike = new Videojuego(toLong(0), "Counter Strike 2", toShort(2023), toShort(18));
-    Videojuego leagueOL = new Videojuego(toLong(0), "League of Legends", toShort(2009), toShort(12));
-    Videojuego valorant = new Videojuego(toLong(0), "VALORANT", toShort(2020), toShort(16));
+    Videojuego minecraft       = new Videojuego(toLong(0), "Minecraft",       toShort(2011), toShort(7));
+    Videojuego counterStrike   = new Videojuego(toLong(0), "Counter Strike 2",toShort(2023), toShort(18));
+    Videojuego leagueOL        = new Videojuego(toLong(0), "League of Legends",   toShort(2009), toShort(12));
+    Videojuego valorant        = new Videojuego(toLong(0), "VALORANT",        toShort(2020), toShort(16));
     
     minecraft.setNombreGenero(genController.findGenero("Sandbox"));
     counterStrike.setNombreGenero(genController.findGenero("Shooter"));
     leagueOL.setNombreGenero(genController.findGenero("MOBA"));
     valorant.setNombreGenero(genController.findGenero("Shooter"));
     
-    List<String> listaPlatMinecraft = Arrays.asList("Windows", "Mac", "Linux", "PlayStation", "XBox", "Android", "iOS");
-    List<String> listaPlatCS = Arrays.asList("Windows", "Mac", "Linux");
-    List<String> listaPlatLOL = Arrays.asList("Windows", "Mac");
-    List<String> listaPlatValorant  = Arrays.asList("Windows");
+    List<String> listaPlatMinecraft   = Arrays.asList("Windows", "Mac", "Linux", "PlayStation", "XBox", "Android", "iOS");
+    List<String> listaPlatCS          = Arrays.asList("Windows", "Mac", "Linux");
+    List<String> listaPlatLOL         = Arrays.asList("Windows", "Mac");
+    List<String> listaPlatValorant    = Arrays.asList("Windows");
     
     List<String> listaModoJuegoMinecraft = Arrays.asList("Multijugador", "Singleplayer", "Cooperativo", "Local", "Sesion Compartida");
-    List<String> listaModoJuegoCS = Arrays.asList("Multijugador", "Cooperativo");
-    List<String> listaModoJuegoLOL = Arrays.asList("Multijugador", "Cooperativo");
+    List<String> listaModoJuegoCS        = Arrays.asList("Multijugador", "Cooperativo");
+    List<String> listaModoJuegoLOL       = Arrays.asList("Multijugador", "Cooperativo");
     List<String> listaModoJuegoValorant  = Arrays.asList("Multijugador", "Cooperativo");
     
-    minecraft.setPlataformaCollection(agregarPlataformasJuego(minecraft, listaPlatMinecraft));
+    minecraft.setPlataformaCollection(    agregarPlataformasJuego(minecraft, listaPlatMinecraft));
     counterStrike.setPlataformaCollection(agregarPlataformasJuego(counterStrike, listaPlatCS));
-    leagueOL.setPlataformaCollection(agregarPlataformasJuego(leagueOL, listaPlatLOL));
-    valorant.setPlataformaCollection(agregarPlataformasJuego(valorant, listaPlatValorant));
+    leagueOL.setPlataformaCollection(     agregarPlataformasJuego(leagueOL, listaPlatLOL));
+    valorant.setPlataformaCollection(     agregarPlataformasJuego(valorant, listaPlatValorant));
     
-    minecraft.setModoJuegoCollection(agregarModosJuegoJuego(minecraft, listaModoJuegoMinecraft));
-    counterStrike.setModoJuegoCollection(agregarModosJuegoJuego(counterStrike, listaModoJuegoCS));
-    leagueOL.setModoJuegoCollection(agregarModosJuegoJuego(leagueOL, listaModoJuegoLOL));
-    valorant.setModoJuegoCollection(agregarModosJuegoJuego(valorant, listaModoJuegoValorant));
+    minecraft.setModoJuegoCollection(     agregarModosJuegoJuego(minecraft, listaModoJuegoMinecraft));
+    counterStrike.setModoJuegoCollection( agregarModosJuegoJuego(counterStrike, listaModoJuegoCS));
+    leagueOL.setModoJuegoCollection(      agregarModosJuegoJuego(leagueOL, listaModoJuegoLOL));
+    valorant.setModoJuegoCollection(      agregarModosJuegoJuego(valorant, listaModoJuegoValorant));
     
     minecraft.setDescripcion("Juego de exploración y construcción en un mundo infinito, ideal para creatividad y supervivencia, solo o con amigos.");
     counterStrike.setDescripcion("Shooter táctico multijugador que redefine el combate en equipo con gráficos avanzados y jugabilidad precisa. Exclusivo para PC.");
@@ -188,38 +215,39 @@ public class CollectData {
     System.out.println(" Traza -> Se han insertado " + contInserts + " videojuegos.");
   }
   
- //------------------------------------------------------------------------------------------------->
-  private static Long toLong (int inputNum) {
+  //--------------------------------------------------------------------------------
+  // Métodos auxiliares para conversiones
+
+  private static Long toLong(int inputNum) {
     return Long.valueOf(inputNum);
   }
-  private static short toShort (int inputNum) {
+
+  private static short toShort(int inputNum) {
     return (short) inputNum;
   }
   
- //------------------------------------------------------------------------------------------------->
-  private static List<Plataforma> agregarPlataformasJuego (Videojuego inputJuego, List<String> inputListaPlataforma) {
+  //--------------------------------------------------------------------------------
+  // Métodos auxiliares para agregar plataformas y modos de juego
+
+  private static List<Plataforma> agregarPlataformasJuego(Videojuego inputJuego, List<String> inputListaPlataforma) {
     List<Plataforma> listaPlataformas = new ArrayList<>();
-    
-    for (String aux : inputListaPlataforma) {
-      Plataforma platAux = platController.findPlataforma(aux);
+    for (String nombrePlataforma : inputListaPlataforma) {
+      Plataforma platAux = platController.findPlataforma(nombrePlataforma);
       if (platAux != null) {
         listaPlataformas.add(platAux);
       }
     }
-    
     return listaPlataformas;
   }
   
-  private static List<ModoJuego> agregarModosJuegoJuego (Videojuego inputJuego, List<String> inputListaModoJuego) {
+  private static List<ModoJuego> agregarModosJuegoJuego(Videojuego inputJuego, List<String> inputListaModoJuego) {
     List<ModoJuego> listaModosJuego = new ArrayList<>();
-    
-    for (String aux : inputListaModoJuego) {
-      ModoJuego platAux = modoJuegoController.findModoJuego(aux);
-      if (platAux != null) {
-        listaModosJuego.add(platAux);
+    for (String nombreModo : inputListaModoJuego) {
+      ModoJuego modoAux = modoJuegoController.findModoJuego(nombreModo);
+      if (modoAux != null) {
+        listaModosJuego.add(modoAux);
       }
     }
-    
     return listaModosJuego;
   }
 }

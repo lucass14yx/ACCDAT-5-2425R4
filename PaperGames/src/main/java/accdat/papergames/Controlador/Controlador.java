@@ -165,7 +165,7 @@ public class Controlador implements ActionListener{
  //-------------------------------------------------------------------------------------------------------------->
   public List<Videojuego> recuperarJuegosFiltroPlataformas (List<String> inputListaFiltros) {
     List<Videojuego> listaVideojuegosFiltrada = new ArrayList<>();
-    listaVideojuegosFiltrada = modeloFiltros.consultaVideojuegoPorPlataforma(inputListaFiltros);
+    listaVideojuegosFiltrada = modeloFiltrosJPQL.consultaVideojuegoPorPlataforma(inputListaFiltros);
     return listaVideojuegosFiltrada;
   }
   
@@ -200,5 +200,10 @@ public class Controlador implements ActionListener{
   }
   
  //-------------------------------------------------------------------------------------------------------------->
-  
+  public void cargarDatosBBDD () {
+    this.cargaDeDatos.generarGeneros();
+    this.cargaDeDatos.generarModosJuego();
+    this.cargaDeDatos.generarPlataformas();
+    this.cargaDeDatos.generarVideojuegos();
+  }
 }

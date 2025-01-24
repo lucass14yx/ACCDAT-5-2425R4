@@ -20,20 +20,32 @@ import java.util.logging.Logger;
  */
 public class ModeloService {
 
-    private final EntityManagerFactory emf;
+    private EntityManagerFactory emf;
     private final VideojuegoJpaController videojuegoJpaC;
     private final DlcJpaController dlcJpaC;
     private final GeneroJpaController generoJpaC;
     private final ModoJuegoJpaController modoJuegoJpaC;
     private final PlataformaJpaController plataformaJpaC;
 
+     //Conexion al servidor: objectdb://localhost/proyecto.odb;user=admin;password=admin
+     //Conecion local: ./db/proyecto.odb
+    
     public ModeloService() {
-        emf = Persistence.createEntityManagerFactory("accdat_PaperGames_jar_1.0-SNAPSHOTPU");
-        videojuegoJpaC = new VideojuegoJpaController(emf);
-        dlcJpaC = new DlcJpaController(emf);
-        generoJpaC = new GeneroJpaController(emf);
-        modoJuegoJpaC = new ModoJuegoJpaController(emf);
-        plataformaJpaC = new PlataformaJpaController(emf);
+      try {
+          // Intenta conectar al servidor ObjectDB
+          emf = Persistence.createEntityManagerFactory("objectdb://localhost/proyecto.odb;user=admin;password=admin");
+          System.out.println("Conexión establecida con el servidor ObjectDB.");
+      } catch (Exception e) {
+          // Si falla, usa la versión embebida
+          System.err.println("No se pudo conectar al servidor ObjectDB. " +
+                             "Se utilizará la base de datos embebida. Error: " + e.getMessage());
+          emf = Persistence.createEntityManagerFactory("./db/proyecto.odb");
+      }
+      videojuegoJpaC = new VideojuegoJpaController(emf);
+      dlcJpaC = new DlcJpaController(emf);
+      generoJpaC = new GeneroJpaController(emf);
+      modoJuegoJpaC = new ModoJuegoJpaController(emf);
+      plataformaJpaC = new PlataformaJpaController(emf);
     }
 
     /** *************************
