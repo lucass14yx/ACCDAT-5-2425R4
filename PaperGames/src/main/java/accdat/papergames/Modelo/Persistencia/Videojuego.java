@@ -6,13 +6,10 @@ package accdat.papergames.Modelo.Persistencia;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
@@ -21,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,7 +33,9 @@ import java.util.List;
   @NamedQuery(name = "Videojuego.findByTitulo", query = "SELECT v FROM Videojuego v WHERE v.titulo = :titulo"),
   @NamedQuery(name = "Videojuego.findByA\u00f1o", query = "SELECT v FROM Videojuego v WHERE v.a\u00f1o = :a\u00f1o"),
   @NamedQuery(name = "Videojuego.findByPegi", query = "SELECT v FROM Videojuego v WHERE v.pegi = :pegi"),
-  @NamedQuery(name = "Videojuego.obtenerListaPEGI", query = "SELECT DISTINCT v.pegi FROM Videojuego v")
+  @NamedQuery(name = "Videojuego.obtenerListaPEGI", query = "SELECT DISTINCT v.pegi FROM Videojuego v"),
+  @NamedQuery(name = "Videojuego.findByPlataformas", query = "SELECT DISTINCT v FROM Videojuego v JOIN v.plataformaCollection p WHERE p.nombrePlataforma IN :plataformas"),
+  @NamedQuery(name = "Videojuego.findByModosJuego", query = "SELECT DISTINCT v FROM Videojuego v JOIN v.modoJuegoCollection m WHERE m.nombreModoJuego IN :modosJuego")
 })
 public class Videojuego implements Serializable {
 
@@ -55,26 +55,17 @@ public class Videojuego implements Serializable {
   private short año;
 
   @Basic(optional = false)
-  @Column(name = "PEGI", nullable = false)
   private short pegi; // 3 - 7 - 12 - 16 - 18
 
-  @JoinTable(name = "VIDEOJUEGO_PLATAFORMAS", joinColumns = {
-      @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
-      @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")})
   @ManyToMany
   private List<Plataforma> plataformaCollection;
 
-  @JoinTable(name = "VIDEOJUEGO_MODO_JUEGO", joinColumns = {
-      @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
-      @JoinColumn(name = "NOMBRE_MODO_JUEGO", referencedColumnName = "NOMBRE_MODO_JUEGO")})
   @ManyToMany
   private List<ModoJuego> modoJuegoCollection;
 
-  @JoinColumn(name = "NOMBRE_GENERO", referencedColumnName = "NOMBRE_GENERO")
   @ManyToOne
   private Genero nombreGenero;
 
-  @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")
   @ManyToOne
   private Plataforma nombrePlataforma;
 
@@ -199,5 +190,4 @@ public class Videojuego implements Serializable {
   public String toString() {
     return "accdat.papergames.Modelo.Persistencia.Videojuego[ idVideojuego=" + idVideojuego + " ]";
   }
-  
 }
