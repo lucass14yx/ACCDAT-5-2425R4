@@ -147,16 +147,25 @@ public class GeneroJpaController implements Serializable {
   }
 
   public List<Genero> findGeneroEntities() {
-      EntityManager em = getEntityManager();
-      em.getTransaction().begin();
-      try {
-          List<Genero> result = findGeneroEntities(true, -1, -1);
-          em.getTransaction().commit();
-          return result;
-      } finally {
-          em.close();
-      }
+    EntityManager em = getEntityManager();
+    List<Genero> generos = null;
+    try {
+        em.getTransaction().begin(); // Iniciar transacción solo si es necesario
+        generos = em.createQuery("SELECT g FROM Genero g", Genero.class).getResultList();
+        em.getTransaction().commit(); // Asegurar commit
+    } catch (Exception e) {
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback(); // Evitar transacción bloqueada
+        }
+        e.printStackTrace();
+    } finally {
+        if (em != null && em.isOpen()) {
+            em.close(); // Cerrar el EntityManager
+        }
+    }
+    return generos;
   }
+
 
   public List<Genero> findGeneroEntities(int maxResults, int firstResult) {
       EntityManager em = getEntityManager();
@@ -186,17 +195,28 @@ public class GeneroJpaController implements Serializable {
       }
   }
 
-  public Genero findGenero(String id) {
-      EntityManager em = getEntityManager();
-      em.getTransaction().begin();
-      try {
-          Genero result = em.find(Genero.class, id);
-          em.getTransaction().commit();
-          return result;
-      } finally {
-          em.close();
-      }
+  public Genero findGenero(String nombreGenero) {
+    EntityManager em = getEntityManager();
+    Genero genero = null;
+    
+    try {
+        em.getTransaction().begin();
+        genero = em.createQuery("SELECT g FROM Genero g WHERE g.nombreGenero = :nombre", Genero.class)
+                   .setParameter("nombre", nombreGenero)
+                   .getSingleResult();
+        em.getTransaction().commit();
+    } catch (Exception e) {
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+        }
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+    
+    return genero;
   }
+
 
   public int getGeneroCount() {
       EntityManager em = getEntityManager();

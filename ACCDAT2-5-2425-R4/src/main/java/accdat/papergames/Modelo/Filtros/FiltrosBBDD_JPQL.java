@@ -17,6 +17,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
+import java.net.Socket;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,19 +43,43 @@ public class FiltrosBBDD_JPQL {
   
  //------------------------------------------------------------------------------->
    // metodos privados | abrir & cerrar factory ->
-  private void abrirFactory () {
-    try {
-      // Intenta conectar al servidor ObjectDB
-      emFactory = Persistence.createEntityManagerFactory("objectdb://localhost/proyecto.odb;user=admin;password=admin");
-      System.out.println("Conexión establecida con el servidor ObjectDB.");
+
+  private void abrirFactory() {
+    boolean serverDisponible = false;
+
+    // Intentar comprobar si el servidor ObjectDB está disponible en localhost:6136
+    try (Socket socket = new Socket("localhost", 6136)) {
+        serverDisponible = true;
+        System.out.println("✅ Servidor ObjectDB disponible. Conectando...");
     } catch (Exception e) {
-      // Si falla, usa la versión embebida
-      System.err.println("No se pudo conectar al servidor ObjectDB. " +
-              "Se utilizará la base de datos embebida. Error: " + e.getMessage());
-      emFactory = Persistence.createEntityManagerFactory("./db/proyecto.odb");
+        System.err.println("⚠️ Servidor ObjectDB no disponible. Se usará la base de datos embebida.");
     }
-    entityManager = emFactory.createEntityManager();
+
+    try {
+        if (serverDisponible) {
+            // Intentar conectar al servidor ObjectDB
+            emFactory = Persistence.createEntityManagerFactory("objectdb://localhost:6136/proyecto.odb;user=admin;password=admin");
+            System.out.println("✅ Conexión establecida con el servidor ObjectDB.");
+        } else {
+            // Usar la base de datos embebida si el servidor no está disponible
+            emFactory = Persistence.createEntityManagerFactory("./db/proyecto.odb");
+            System.out.println("✅ Usando base de datos embebida.");
+        }
+    } catch (Exception e) {
+        System.err.println("❌ No se pudo establecer ninguna conexión. Error: " + e.getMessage());
+    }
+
+    // Verificar si la base de datos se inicializó correctamente
+    if (emFactory != null) {
+        entityManager = emFactory.createEntityManager();
+    } else {
+        System.err.println("❌ No se pudo inicializar EntityManagerFactory.");
+    }
   }
+
+
+
+
   
   private void cerrarFactory () {
     entityManager.close();
@@ -257,6 +282,7 @@ public List<Videojuego> consultaVideojuegoPorGenero(List<String> nombreGeneros) 
         .getResultList();
     
     entityManager.getTransaction().commit();
+    entityManager.clear();
     
     return listaVideojuegos;
 }

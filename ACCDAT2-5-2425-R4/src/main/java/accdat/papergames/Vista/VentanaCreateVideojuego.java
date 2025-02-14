@@ -381,16 +381,36 @@ public class VentanaCreateVideojuego extends javax.swing.JFrame implements Inter
   private javax.swing.JTextField txtTitulo;
   // End of variables declaration//GEN-END:variables
  //-------------------------------------------------------------------------------------------------------------------------------------> 
-  private void recogerDatosCampos () {
+  private void recogerDatosCampos() {
     guardarPlataformasSeleccionadas();
     guardarModosJuegoSeleccionados();
-    
+
     this.titulo = txtTitulo.getText();
     this.descripcion = txtDescripcion.getText();
-    this.generoSelected = (String) cboxListaGenero.getSelectedItem();
-    this.anioSalida = (int) spinnerAnioSalida.getValue();
-    this.pegiSelected = Integer.parseInt(cboxListaPegi.getSelectedItem().toString());
     
+    // Manejo de posibles valores nulos en los JComboBox
+    Object generoObj = cboxListaGenero.getSelectedItem();
+    Object pegiObj = cboxListaPegi.getSelectedItem();
+
+    if (generoObj != null) {
+        this.generoSelected = generoObj.toString();
+    } else {
+        this.generoSelected = ""; // O podrías asignar un valor por defecto
+    }
+
+    if (pegiObj != null) {
+        try {
+            this.pegiSelected = Integer.parseInt(pegiObj.toString());
+        } catch (NumberFormatException e) {
+            System.err.println("⚠️ Error: El valor seleccionado en PEGI no es un número válido.");
+            this.pegiSelected = -1; // O asignar un valor por defecto
+        }
+    } else {
+        this.pegiSelected = -1; // O algún valor por defecto que indique que no hay selección
+    }
+
+    this.anioSalida = (int) spinnerAnioSalida.getValue();
+
     insertarPlataformas();
     insertarModosJuego();
   }

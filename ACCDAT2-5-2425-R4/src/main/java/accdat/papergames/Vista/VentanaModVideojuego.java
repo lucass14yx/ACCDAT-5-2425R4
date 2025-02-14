@@ -429,43 +429,83 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   private javax.swing.JTextField txtTitulo;
   // End of variables declaration//GEN-END:variables
  //------------------------------------------------------------------------------------------------------------->
-  private void cargarCamposDatosVideojuego () {
-    this.titulo = videojuegoSelected.getTitulo();
-    this.generoSelected = videojuegoSelected.getNombreGenero().getNombreGenero();
-    this.pegiSelected = videojuegoSelected.getPegi();
-    this.descripcionSelected = videojuegoSelected.getDescripcion();
+  private void cargarCamposDatosVideojuego() {
+    if (videojuegoSelected == null) {
+        System.err.println("⚠️ Error: No se encontró el videojuego seleccionado.");
+        return;
+    }
+
+    this.titulo = videojuegoSelected.getTitulo() != null ? videojuegoSelected.getTitulo() : "";
+    this.descripcionSelected = videojuegoSelected.getDescripcion() != null ? videojuegoSelected.getDescripcion() : "";
     this.anioSalida = videojuegoSelected.getAño();
+    
+    if (videojuegoSelected.getNombreGenero() != null) {
+        this.generoSelected = videojuegoSelected.getNombreGenero().getNombreGenero();
+    } else {
+        this.generoSelected = "";
+    }
+
+    this.pegiSelected = videojuegoSelected.getPegi();
+
     List<Plataforma> listaPlataformas = (List<Plataforma>) videojuegoSelected.getPlataformaCollection();
     List<ModoJuego> listaModosJuego = (List<ModoJuego>) videojuegoSelected.getModoJuegoCollection();
-    
-    cargarPlataformaVideojuego(listaPlataformas);
-    cargarModosJuegoVideojuego(listaModosJuego);
-    
+
+    cargarPlataformaVideojuego(listaPlataformas != null ? listaPlataformas : new ArrayList<>());
+    cargarModosJuegoVideojuego(listaModosJuego != null ? listaModosJuego : new ArrayList<>());
+
     txtTitulo.setText(this.titulo);
     txtDescripcion.setText(this.descripcionSelected);
     spinnerAnioSalida.setValue(this.anioSalida);
-    marcarOpcionGenero(this.generoSelected);
-    marcarOpcionPEGI(this.pegiSelected);
+
+    if (!this.generoSelected.isEmpty()) {
+        marcarOpcionGenero(this.generoSelected);
+    }
+    if (this.pegiSelected > 0) {
+        marcarOpcionPEGI(this.pegiSelected);
+    }
   }
   
-  private void recogerDatosCampos () {
-    if (txtTitulo.getText().isEmpty() && txtDescripcion.getText().isEmpty() && listaPlataformasVideojuego.isEmpty() && listaModosJuegoVideojuego.isEmpty()) {
-      generarPopup();
-    } else {
-      videojuegoSelected.setTitulo(txtTitulo.getText());
-      videojuegoSelected.setDescripcion(txtDescripcion.getText());
-      videojuegoSelected.setPegi((short) Integer.parseInt(cboxListaPegi.getSelectedItem().toString()));
-      videojuegoSelected.setAño((short) this.anioSalida);
-      videojuegoSelected.setNombreGenero(this.controlador.encontrarGenero((String) this.cboxListaGeneros.getSelectedItem()));
-
-      insertarModosJuegoVideojuego();
-      insertarPlataformasVideojuego();
-      videojuegoSelected.setModoJuegoCollection(listaModosJuegoVideojuego);
-      videojuegoSelected.setPlataformaCollection(listaPlataformasVideojuego);
+  private void recogerDatosCampos() {
+    if (txtTitulo.getText().isEmpty() || txtDescripcion.getText().isEmpty()) {
+        generarPopup();
+        return;
     }
+
+    videojuegoSelected.setTitulo(txtTitulo.getText());
+    videojuegoSelected.setDescripcion(txtDescripcion.getText());
+
+    // Manejo de null en PEGI
+    Object pegiObj = cboxListaPegi.getSelectedItem();
+    if (pegiObj != null) {
+        try {
+            videojuegoSelected.setPegi((short) Integer.parseInt(pegiObj.toString()));
+        } catch (NumberFormatException e) {
+            System.err.println("⚠️ Error: El PEGI seleccionado no es un número válido.");
+            videojuegoSelected.setPegi((short) -1);
+        }
+    }
+
+    // Manejo de null en Género
+    Object generoObj = cboxListaGeneros.getSelectedItem();
+    if (generoObj != null) {
+        videojuegoSelected.setNombreGenero(this.controlador.encontrarGenero(generoObj.toString()));
+    }
+
+    videojuegoSelected.setAño((short) this.anioSalida);
+
+    insertarModosJuegoVideojuego();
+    insertarPlataformasVideojuego();
     
-    
+    if (listaModosJuegoVideojuego != null) {
+        videojuegoSelected.setModoJuegoCollection(listaModosJuegoVideojuego);
+    }
+
+    if (listaPlataformasVideojuego != null) {
+        videojuegoSelected.setPlataformaCollection(listaPlataformasVideojuego);
+    }
   }
+  
+  
  //------------------------------------------------------------------------------------------------------------->
   private void generarPopup () {
     java.awt.Frame framePopup = new Frame("ERROR MODIFICACION VIDEOJUEGO");
@@ -586,22 +626,40 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
     }
   }
   
-  private void marcarOpcionPEGI (int inputPEGI) {
-    for (int i=0; i < cboxListaPegi.getItemCount(); i++) {
-      if (Integer.parseInt(cboxListaPegi.getItemAt(i)) == inputPEGI) {
-        cboxListaPegi.setSelectedIndex(i);
-      }
+  private void marcarOpcionPEGI(int inputPEGI) {
+    if (cboxListaPegi.getItemCount() == 0) {
+        System.err.println("⚠️ Error: No hay opciones de PEGI disponibles.");
+        return;
+    }
+
+    for (int i = 0; i < cboxListaPegi.getItemCount(); i++) {
+        try {
+            if (Integer.parseInt(cboxListaPegi.getItemAt(i)) == inputPEGI) {
+                cboxListaPegi.setSelectedIndex(i);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("⚠️ Error: Opción de PEGI inválida en el índice " + i);
+        }
     }
   }
     
-  private void devolverVideojuego (Long inputId) {
+  private void devolverVideojuego(Long inputId) {
     List<Videojuego> listaVideojuegos = this.controlador.cargarVideojuegos();
-    
-    for (Videojuego aux : listaVideojuegos) {
-      if (Objects.equals(aux.getIdVideojuego(), inputId)) {
-        this.videojuegoSelected = aux;
-      }
+
+    if (listaVideojuegos == null || listaVideojuegos.isEmpty()) {
+        System.err.println("⚠️ Error: No hay videojuegos en la base de datos.");
+        return;
     }
+
+    for (Videojuego aux : listaVideojuegos) {
+        if (aux != null && Objects.equals(aux.getIdVideojuego(), inputId)) {
+            this.videojuegoSelected = aux;
+            return;
+        }
+    }
+
+    System.err.println("⚠️ Error: No se encontró un videojuego con el ID: " + inputId);
   }
   
  //------------------------------------------------------------------------------------------------------------->
