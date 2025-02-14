@@ -7,8 +7,11 @@ package accdat.papergames.Modelo;
 import accdat.papergames.Modelo.Controllers.*;
 import accdat.papergames.Modelo.Persistencia.*;
 import accdat.papergames.exceptions.NonexistentEntityException;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,6 +24,7 @@ import java.util.logging.Logger;
 public class ModeloService {
 
     private EntityManagerFactory emf;
+    private EntityManager em;
     private final VideojuegoJpaController videojuegoJpaC;
     private final DlcJpaController dlcJpaC;
     private final GeneroJpaController generoJpaC;
@@ -186,5 +190,27 @@ public class ModeloService {
       } catch (Exception ex) {
         Logger.getLogger(ModeloService.class.getName()).log(Level.SEVERE, null, ex);
       }
+    }
+    
+    public List<Genero> findGeneroEntities() {
+        EntityManager em = emf.createEntityManager();
+        List<Genero> generos = new ArrayList<>();
+        try {
+            em.getTransaction().begin();
+            generos = em.createQuery("SELECT g FROM Genero g", Genero.class)
+                    .setLockMode(LockModeType.NONE)  // Evita bloqueos
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        return generos;
     }
 }

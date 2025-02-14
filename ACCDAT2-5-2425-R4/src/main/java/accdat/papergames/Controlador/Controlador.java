@@ -104,14 +104,19 @@ public class Controlador implements ActionListener{
     return this.modeloOperaciones.devolverListaGeneros();
   }
   
-  public List<String> cargarNombresGeneros () {
-    List<String> listaGeneros = new ArrayList<>();
-    for (Genero aux : cargarGeneros()) {
-      listaGeneros.add(aux.getNombreGenero());
+  public List<String> cargarNombresGeneros() {
+    List<String> nombresGeneros = new ArrayList<>();
+    try {
+        List<Genero> generos = this.modeloServicios.findGeneroEntities();
+        for (Genero g : generos) {
+            nombresGeneros.add(g.getNombreGenero());
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-    
-    return listaGeneros;
+    return nombresGeneros;
   }
+
   
     // metodo | cargarModosJuego ->
   public List<ModoJuego> cargarModosJuego () {
